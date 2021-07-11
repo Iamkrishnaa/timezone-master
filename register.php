@@ -6,19 +6,21 @@ include "header.php";
 
 <main>
     <!-- Hero Area Start-->
-    <div class="slider-area ">
-        <div class="single-slider slider-height2 d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="hero-cap text-center">
-                            <h2>Register</h2>
+    <canvas id="nokey" style="background-color: #000; color:#fff;">
+        <div class="slider-area ">
+            <div class="single-slider slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap text-center">
+                                <h2 style="z-index: 99999; position:absolute;">Register</h2>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </canvas>
     <!-- Hero Area End-->
     <!--================login_part Area =================-->
     <section class="login_part section_padding ">
@@ -90,7 +92,9 @@ include "header.php";
     </section>
 
     <script src="assets/js/handleForm.js"></script>
-    <!--================login_part end =================-->
+    <script src="assets/js/vendor/animated-canvas.js"></script>
+    <!--================login_part end =================
+        -->
 </main>
 <?php
 include "footer.php";

@@ -107,4 +107,4 @@ function checkUser(userName){
 
 let userNameField = document.getElementById('userName');
 let submitButton = document.getElementById("submit");
-submitButton.addEventListener('click', function(){checkUser(userNameField.value)});
+submitButton.addEventListener('click', function(){registerUser()});
