@@ -1,3 +1,109 @@
+let firstName = document.getElementById('firstName');
+let lastName = document.getElementById('lastName');
+let email = document.getElementById('email');
+let phoneNumber = document.getElementById('phoneNumber');
+let state = document.getElementById('state');
+let city = document.getElementById('city');
+let tole = document.getElementById('tole');
+let userName = document.getElementById('userName');
+let password = document.getElementById('password');
+let confirmPassword = document.getElementById('confirmPassword');
+let submitButton = document.getElementById("submit");
+
+async function validateFormData(){
+    if(
+        !isEmpty(firstName) && !isEmpty(lastName) && 
+        !isEmpty(email) && !isEmpty(phoneNumber) && 
+        !isEmpty(state) && !isEmpty(city) && 
+        !isEmpty(tole) && !isEmpty(userName) && 
+        !isEmpty(password) && !isEmpty(confirmPassword)
+        ){
+            if(!checkSamePassword(password, confirmPassword)){
+                let isUserPresent = await checkUser(userName.value);
+                if(!isUserPresent){
+                    registerUser();
+                }else{
+                    handleErrorMessage(userName, true);
+                }
+            }
+        }
+    
+}
+
+function checkSamePassword(pass, confPass){
+    if(pass.value !== confPass.value){
+        handleErrorMessage(pass, true);
+        handleErrorMessage(confPass, true);
+        return true;
+    }else{
+        handleErrorMessage(pass, false);
+        handleErrorMessage(confPass, false);
+        return false;
+    }
+}
+
+function validateEmail(mail) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    isValid =  re.test(mail.toLowerCase());
+    if (isValid){
+        handleErrorMessage(email, false);
+        return true;
+    }else{
+        handleErrorMessage(email, true);
+        return false;
+    }
+}
+
+function isEmpty(field){
+    if(field.value === ""){
+        handleErrorMessage(field, true);
+        return true;
+    }else{
+        handleErrorMessage(field, false);
+        return false;
+    }
+}
+
+function handleErrorMessage(field, status){
+    if(status == true){
+        field.style.borderBottom = "2px solid";
+        field.style.borderBottomColor = "red";
+    }else{
+        field.style.borderBottom = "1px solid";
+        field.style.borderBottomColor = "#ddd";
+    }
+}
+
+async function checkUser(uName){
+    var data = {
+        "checkUserName": uName
+    }
+    var headers = {
+        "Content-Type": "application/json",
+     }
+
+     let response = await fetch("controller/RegisterUser.php", {
+            method: "POST",
+            headers: headers,
+            body:  JSON.stringify(data)
+        }
+     );
+    
+     let result = await response.json();
+     return(result['isUserPresent']);
+    // fetch("controller/RegisterUser.php", {
+    //     method: "POST",
+    //     headers: headers,
+    //     body:  JSON.stringify(data)
+    // })
+    // .then(function(response){ 
+    //     return response.json(); 
+    // })
+    // .then(function(data){ 
+    //     console.log(data)
+    // });
+}
+
 function registerUser() {
     var form = document.querySelector('form');
     var data = new FormData(form);
@@ -14,97 +120,19 @@ function registerUser() {
     xhr.send(JSON.stringify(formData));
 
     xhr.onload = function() {
-        // let status = JSON.parse(xhr.responseText)["status"];
         console.log(this.responseText);
-        // console.log(status);
     }
 
 }
 
-function validateFormData(){
-    let firstName = document.getElementById('firstName');
-    let lastName = document.getElementById('lastName');
-    let email = document.getElementById('email');
-    let phoneNumber = document.getElementById('phoneNumber');
-    let state = document.getElementById('state');
-    let city = document.getElementById('city');
-    let tole = document.getElementById('tole');
-    let userName = document.getElementById('userName');
-    let password = document.getElementById('password');
-    let confirmPassword = document.getElementById('confirmPassword');
+email.addEventListener('input', function(){
+    validateEmail(email.value);
+});
 
-
+confirmPassword.addEventListener('input', function(){
     checkSamePassword(password, confirmPassword);
-    checkUser(userNameField.value);
-    isEmpty(firstName);
-    isEmpty(lastName);
-    isEmpty(email);
-    isEmpty(phoneNumber);
-    isEmpty(state);
-    isEmpty(city);
-    isEmpty(tole);
-    isEmpty(userName);
-    isEmpty(password);
-    isEmpty(confirmPassword);
-    
-}
+});
 
-function checkSamePassword(pass, confPass){
-    if(pass.value !== confPass.value){
-        pass.style.borderBottom = "2px solid";
-        pass.style.borderBottomColor = "red";
-        confPass.style.borderBottom = "2px solid";
-        confPass.style.borderBottomColor = "red";
-        return true;
-    }else{
-
-        pass.style.borderBottom = "1px solid";
-        pass.style.borderBottomColor = "#ddd";
-        confPass.style.borderBottom = "1px solid";
-        confPass.style.borderBottomColor = "#ddd";
-        return false;
-    }
-}
-
-function isEmpty(field){
-    if(field.value === ""){
-        field.style.borderBottom = "2px solid";
-        field.style.borderBottomColor = "red";
-        return true;
-    }else{
-        field.style.borderBottom = "1px solid";
-        field.style.borderBottomColor = "#ddd";
-        return false;
-    }
-}
-
-
-function checkUser(userName){
-    let formData = {};
-
-    formData["checkUserName"] = userName;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "controller/RegisterUser.php", true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify(formData));
-
-
-    xhr.onload = function() {
-        let isUserAlreadyExists = JSON.parse(xhr.responseText)["isUserPresent"];
-        console.log(this.responseText);
-        if(isUserAlreadyExists){
-            userNameField.style.borderBottom = "2px solid";
-            userNameField.style.borderBottomColor = "red";
-        }else{
-            userNameField.style.borderBottom = "1px solid";
-            userNameField.style.borderBottomColor = "#ddd";
-        }
-    }
-}
-
-
-
-let userNameField = document.getElementById('userName');
-let submitButton = document.getElementById("submit");
-submitButton.addEventListener('click', function(){registerUser()});
+submitButton.addEventListener('click', function(){
+    validateFormData();
+});

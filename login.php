@@ -1,5 +1,28 @@
 <?php
 include "header.php";
+$userNameF = "";
+$passwordF = "";
+
+$userNameErr = "";
+$passwordErr = "";
+
+if (isset($_POST['login'])) {
+    $userNameF = $_POST['userName'];
+    $passwordF = $_POST['password'];
+    include "controller/LoginUser.php";
+    $obj = new LoginUser();
+    $response = json_decode($obj->login($_POST['userName'], $_POST['password']), true);
+    $status = $response['status'];
+    if ($status == "Password Incorrect") {
+        $passwordErr = "Password Incorrect";
+    }
+    if ($status == "Username Not Found") {
+        $userNameErr = "Username Not Found";
+    }
+    if ($status == "Login Success") {
+        echo "Login Success";
+    }
+}
 ?>
 <main>
     <!-- Hero Area Start-->
@@ -36,19 +59,21 @@ include "header.php";
                         <div class="login_part_form_iner">
                             <h3>Welcome Back ! <br>
                                 Please Sign in now</h3>
-                            <form class="row contact_form" action="#" method="post" novalidate="novalidate">
+                            <form class="row contact_form" action="" method="post" novalidate="novalidate">
                                 <div class="col-md-12 form-group p_star">
-                                    <input type="text" class="form-control" id="name" name="name" value="" placeholder="Username">
+                                    <input type="text" class="form-control" id="userName" name="userName" value="<?php echo $userNameF; ?>" placeholder="Username">
+                                    <span class="loginpage-error" style="color: red; font-size:16px; margin-left:20px;"><?php echo "$userNameErr"; ?></span>
                                 </div>
                                 <div class="col-md-12 form-group p_star">
-                                    <input type="password" class="form-control" id="password" name="password" value="" placeholder="Password">
+                                    <input type="password" class="form-control" id="password" name="password" value="<?php echo $passwordF; ?>" placeholder="Password">
+                                    <span class="loginpage-error" style="color: red; font-size:16px; margin-left:20px;"><?php echo "$passwordErr"; ?></span>
                                 </div>
                                 <div class="col-md-12 form-group">
                                     <div class="creat_account d-flex align-items-center">
                                         <input type="checkbox" id="f-option" name="selector">
                                         <label for="f-option">Remember me</label>
                                     </div>
-                                    <button type="submit" value="submit" class="btn_3">
+                                    <button type="submit" value="submit" name="login" class="btn_3">
                                         log in
                                     </button>
                                     <a class="lost_pass" href="#">forget password?</a>

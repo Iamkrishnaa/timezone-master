@@ -1,41 +1,52 @@
 <?php
 //this will navigate directory from document root
+require $_SERVER['DOCUMENT_ROOT'] . '/timezone-master/models/UserModel.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/timezone-master/models/User.php';
 class RegisterUser
 {
-
-    private $user;
+    private $userModel;
     public function __construct($postData)
     {
+
+        $this->userModel = new UserModel();
+
         if (isset($postData['checkUserName'])) {
-            $data = array(
-                "firstName" => "",
-                "lastName" => "",
-                "email" => "",
-                "phoneNumber" => "",
-                "state" => "",
-                "city" => "",
-                "tole" => "",
-                "userName" => $postData['checkUserName'],
-                "password" => ""
+            $this->isUserAlreadyPresent($postData['checkUserName']);
+        }
+        if (isset($postData['register'])) {
+            $firstName = $postData["firstName"];
+            $lastName = $postData["lastName"];
+            $email = $postData["email"];
+            $phoneNumber = $postData["phoneNumber"];
+            $state = $postData["state"];
+            $city = $postData["city"];
+            $tole = $postData["tole"];
+            $userName = $postData["userName"];
+            $password = $postData["password"];
+
+            $user = new User(
+                0,
+                $firstName,
+                $lastName,
+                $email,
+                $phoneNumber,
+                $state,
+                $city,
+                $tole,
+                $userName,
+                $password,
+                3,
+                date("Y-m-d")
             );
 
-            $this->user = $this->createUserObject($data);
-        } else {
-            $this->user = $this->createUserObject($postData);
-        }
-
-        if (isset($postData["checkUserName"])) {
-            $this->isUserAlreadyPresent($postData['checkUserName']);
-        } else if (isset($postData["register"])) {
-            $this->registerUser();
+            $this->registerUser($user);
         }
     }
 
-    public function registerUser()
+    public function registerUser($user)
     {
-        if ($this->user->isConnected()) {
-            $result = $this->user->register($this->user);
+        if ($this->userModel->isConnected()) {
+            $result = $this->userModel->register($user);
             if ($result) {
                 echo json_encode(array("status" => "Registration Success"));
             } else {
@@ -47,44 +58,14 @@ class RegisterUser
     public function isUserAlreadyPresent($userName)
     {
 
-        if ($this->user->isConnected()) {
-            $result = $this->user->isUserAlreadyExists($userName);
+        if ($this->userModel->isConnected()) {
+            $result = $this->userModel->isUserAlreadyExists($userName);
             if ($result) {
                 echo json_encode(array("isUserPresent" => $result));
             } else {
                 echo json_encode(array("isUserPresent" => $result));
             }
         }
-    }
-
-    public function createUserObject($data)
-    {
-        $firstName = $data["firstName"];
-        $lastName = $data["lastName"];
-        $email = $data["email"];
-        $phoneNumber = $data["phoneNumber"];
-        $state = $data["state"];
-        $city = $data["city"];
-        $tole = $data["tole"];
-        $userName = $data["userName"];
-        $password = $data["password"];
-
-        $user = new User(
-            0,
-            $firstName,
-            $lastName,
-            $email,
-            $phoneNumber,
-            $state,
-            $city,
-            $tole,
-            $userName,
-            $password,
-            3,
-            date("Y-m-d")
-        );
-
-        return $user;
     }
 }
 

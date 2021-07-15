@@ -1,7 +1,5 @@
 <?php
-//this will navigate directory from document root
-require $_SERVER['DOCUMENT_ROOT'] . '/timezone-master/db/CheckConnection.php';
-class User extends CheckConnection
+class User
 {
     private int $userId;
     private string $firstName;
@@ -30,7 +28,6 @@ class User extends CheckConnection
         int $level,
         string $registeredDate
     ) {
-        parent::__construct();
         $this->userId = $userId;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
@@ -164,68 +161,4 @@ class User extends CheckConnection
     {
         $this->registeredDate = $registeredDate;
     }
-
-
-
-    public function register(User $user)
-    {
-        $sql = "INSERT INTO `registration`(`firstName`, `lastName`, `email`, `phoneNumber`, `state`, `city`, `tole`, `userName`, `password`, `level`, `registeredDate`) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
-
-        $stmt = $this->getConnection()->prepare($sql);
-
-        $stmt->bind_param(
-            'sssssssssis',
-            $firstName,
-            $lastName,
-            $email,
-            $phoneNumber,
-            $state,
-            $city,
-            $tole,
-            $userName,
-            $password,
-            $level,
-            $registeredDate
-        );
-
-        $firstName = $user->getFirstName();
-        $lastName = $user->getLastName();
-        $email = $user->getEmail();
-        $phoneNumber = $user->getPhoneNumber();
-        $state = $user->getState();
-        $city = $user->getCity();
-        $tole = $user->getTole();
-        $userName = $user->getUserName();
-        $password = $user->getPassword();
-        $level = $user->getLevel();
-        $registeredDate = $user->getRegisteredDate();
-
-        $result = $stmt->execute();
-
-        $this->getConnection()->close(); //close mysql connection
-        return $result;
-    }
-
-
-    public function isUserAlreadyExists($user): bool
-    {
-
-        $isAlreadyPresent = false;
-
-        if ($this->isConnected()) {
-            $sql = "SELECT * FROM `registration` WHERE userName = '$user';";
-            $result = $this->getConnection()->query($sql);
-            if ($result->num_rows > 0) {
-                $isAlreadyPresent = true;
-            } else {
-                $isAlreadyPresent = false;
-            }
-            $this->getConnection()->close(); //close mysql connection
-        }
-
-        return $isAlreadyPresent;
-    }
 }
-
-// $obj = new User(1, "", "", "", "", "", "", "", "", "", 2, "2021-12-22");
-// echo (int)$obj->isUserAlreadyExists("Chor");

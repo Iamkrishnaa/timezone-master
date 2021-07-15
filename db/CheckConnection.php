@@ -7,7 +7,7 @@ class CheckConnection
     {
         $db = new DatabaseConfig();
 
-        $this->connection = new mysqli(
+        $this->connection = mysqli_connect(
             $db->getHostName(),
             $db->getUserName(),
             $db->getPassword(),
