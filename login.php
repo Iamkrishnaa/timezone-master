@@ -20,7 +20,12 @@ if (isset($_POST['login'])) {
         $userNameErr = "Username Not Found";
     }
     if ($status == "Login Success") {
-        echo "Login Success";
+        $_SESSION["user"] = $_POST['userName'];
+?>
+        <script>
+            window.location.href = "profile.php";
+        </script>
+<?php
     }
 }
 ?>

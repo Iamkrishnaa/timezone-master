@@ -93,4 +93,20 @@ class UserModel extends CheckConnection
         }
         $this->getConnection()->close();
     }
+
+    public function getUserDetail($userName)
+    {
+        $sql = "SELECT * FROM `registration` WHERE userName = '$userName';";
+        $result = $this->getConnection()->query($sql);
+
+        $detail = array();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $detail = $row;
+            }
+        }
+
+        return $detail;
+    }
 }

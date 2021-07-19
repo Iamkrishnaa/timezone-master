@@ -24,6 +24,10 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
+<?php
+session_start();
+?>
+
 <body>
     <header>
         <!-- Header Start -->
@@ -75,7 +79,16 @@
                                         <span class="flaticon-search"></span>
                                     </div>
                                 </li>
-                                <li> <a href="login.php"><span class="flaticon-user"></span></a></li>
+                                <li> <a href="<?php
+                                                if (isset($_SESSION['user'])) {
+                                                    echo "profile.php";
+                                                } else {
+                                                    echo "login.php";
+                                                }
+                                                ?>">
+                                        <span class="flaticon-user"></span>
+                                    </a>
+                                </li>
                                 <li><a href="cart.php"><span class="flaticon-shopping-cart"></span></a> </li>
                             </ul>
                         </div>
