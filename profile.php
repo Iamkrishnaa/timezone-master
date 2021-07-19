@@ -62,25 +62,7 @@ if (isset($_SESSION['user'])) {
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-3">
-            <!--left col-->
 
-
-            <div class="text-center">
-                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
-                <h6>Upload a different photo</h6>
-                <input type="file" class="text-center center-block file-upload">
-            </div>
-
-            <form action="" method="POST">
-                <div class="text-center m-2">
-                    <button type="submit" name="log-out" class="btn btn-danger btn-md"><i class="glyphicon glyphicon-log-out"></i> <b>Logout</b></button>
-                </div>
-            </form>
-
-            </hr><br>
-
-        </div>
         <!--/col-3-->
         <div class="col-sm-9">
             <ul class="nav nav-tabs">
