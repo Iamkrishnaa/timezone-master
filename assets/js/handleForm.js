@@ -119,8 +119,14 @@ function registerUser() {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify(formData));
 
+
     xhr.onload = function() {
         console.log(this.responseText);
+        let response = JSON.parse(this.responseText);
+        if(response["status"] === "Registration Success"){
+            alert("login success, you can login");
+            location.href = "login.php";
+        };
     }
 
 }
