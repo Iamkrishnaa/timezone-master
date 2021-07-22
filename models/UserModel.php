@@ -106,6 +106,7 @@ class UserModel extends CheckConnection
                 $detail = $row;
             }
         }
+        $this->getConnection()->close();
 
         return $detail;
     }

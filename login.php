@@ -1,10 +1,19 @@
 <?php
+
 include "header.php";
 $userNameF = "";
 $passwordF = "";
 
 $userNameErr = "";
 $passwordErr = "";
+
+if (isset($_SESSION['user'])) {
+?>
+    <script>
+        window.location.href = "profile.php";
+    </script>
+    <?php
+}
 
 if (isset($_POST['login'])) {
     $userNameF = $_POST['userName'];
@@ -21,7 +30,7 @@ if (isset($_POST['login'])) {
     }
     if ($status == "Login Success") {
         $_SESSION["user"] = $_POST['userName'];
-?>
+    ?>
         <script>
             window.location.href = "profile.php";
         </script>

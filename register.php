@@ -1,7 +1,13 @@
 <?php
 include "preloader.php";
 include "header.php";
-
+if (isset($_SESSION['user'])) {
+?>
+    <script>
+        window.location.href = "profile.php";
+    </script>
+<?php
+}
 ?>
 
 <main>

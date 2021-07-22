@@ -126,7 +126,9 @@ function registerUser() {
         if(response["status"] === "Registration Success"){
             alert("login success, you can login");
             location.href = "login.php";
-        };
+        }else{
+            alert("Something went wrong.");
+        }
     }
 
 }
